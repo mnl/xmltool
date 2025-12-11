@@ -30,12 +30,7 @@ jobs:
         run: docker run --init -d --rm --name smoke $IMAGE sleep 120s
 
       - name: Wait for readiness
-        run: |
-          until docker container ls \
-               --filter name=smoke \
-               --filter state=running \
-              | grep --quiet smoke ; \
-              do sleep 1; done
+        run: sleep 3
 
       - name: Ensure xmlstarlet is installed
         run: docker exec smoke xmlstarlet --version
