@@ -1,4 +1,4 @@
-FROM alpine AS base
+FROM docker.io/library/alpine:3@sha256:a107a3c031732299dd9dd607bb13787834db2de38cfa13f1993b7105e4814c60 AS base
 
 RUN apk add \
 	libxml2-utils=~2.13 \
