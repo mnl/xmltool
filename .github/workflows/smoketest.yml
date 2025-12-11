@@ -1,0 +1,55 @@
+name: Smoke
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  smoketest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    env:
+
+      IMAGE: ${{ github.event.repository.name }}:${{ github.run_id }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image (load locally)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          load: true
+          tags: ${{ env.IMAGE }}
+          cache-from: type=gha
+
+      - name: Run container
+        run: docker run --init -d --rm --name smoke $IMAGE sleep 120s
+
+      - name: Wait for readiness
+        run: |
+          until docker container ls \
+               --filter name=smoke \
+               --filter state=running \
+              | grep --quiet smoke ; \
+              do sleep 1; done
+
+      - name: Ensure xmlstarlet is installed
+        run: docker exec smoke xmlstarlet --version
+
+      - name: Ensure xmllint is installed
+        run: docker exec smoke xmllint --version
+
+      - name: Ensure xq is installed
+        run: docker exec smoke xq --version
+
+      - name: Dump logs on failure
+        if: failure()
+        run: docker logs smoke || true
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f smoke || true
