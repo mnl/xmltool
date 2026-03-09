@@ -6,6 +6,8 @@ RUN apk add \
 	xq=~1.3 \
 	;
 
+RUN apk upgrade --no-cache
+
 # Add non-root user
 RUN adduser -u 1000 -D -G users -g "xml user" xml
 USER 1000:100
