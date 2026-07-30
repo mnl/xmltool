@@ -44,7 +44,7 @@ jobs:
 
       - name: Build image
         id: buildah
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v2.13
         with:
           image: ${{ env.IMAGE }}
           tags: ${{ steps.meta.outputs.tags }}
