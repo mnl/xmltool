@@ -44,7 +44,7 @@ jobs:
 
       - name: Build image
         id: buildah
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           image: ${{ env.IMAGE }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -62,7 +62,7 @@ jobs:
 
 
       - name: Log in to registry
-        uses: redhat-actions/podman-login@v1
+        uses: redhat-actions/podman-login@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -70,7 +70,7 @@ jobs:
 
       - name: Push to registry
         id: push
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v3
         with:
           image: ${{ steps.buildah.outputs.image }}
           tags: ${{ steps.buildah.outputs.tags }}
