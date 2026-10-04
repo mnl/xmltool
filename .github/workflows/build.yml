@@ -6,6 +6,9 @@ on:
   push:
     branches: [ "main" ]
     tags: [ 'v*.*.*' ]
+    paths-ignore:
+      - '**/README.md'
+      - '**/artifacthub*.yml'
   workflow_dispatch: {}
 
 permissions:
@@ -38,9 +41,10 @@ jobs:
             org.opencontainers.image.authors=${{ github.actor }}
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.description="XML Tool image"
+            org.opencontainers.image.description=XML Tool image
             org.opencontainers.image.revision={{sha}}
             org.opencontainers.image.created={{commit_date 'YYYY-MM-DDTHH:mm:ss[Z]'}}
+            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/mnl/xmltool/main/README.md
 
       - name: Build image
         id: buildah
